@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "Estimations sum for Jira boards",
-  "description": "This extension sums up the remaining time estimates shown in a scrum board of Jira",
-  "version": "0.94",
+  "description": "This extension sums up the points shown in a scrum board of Jira",
+  "version": "0.95",
   "short_name" : "Jira Estimations Sum",
 
   "author": "Dirk Räbiger",

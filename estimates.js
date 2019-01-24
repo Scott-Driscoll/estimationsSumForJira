@@ -6,25 +6,27 @@ var handleCard = function(card) {
 	if(!spanWithEstimate || spanWithEstimate.length == 0) {
 		// Jira: cloud
 		spanWithEstimate = $(card).find("aui-badge.ghx-estimate");
-		if(!spanWithEstimate || spanWithEstimate.length == 0) {
+		console.log("spanWinthEstimate: " + spanWithEstimate);
+		/*if(!spanWithEstimate || spanWithEstimate.length == 0) {
 			// Jira version 7.11.0 does not set the class
 			spanWithEstimate = $(card).find("aui-badge");
 			if(!spanWithEstimate || spanWithEstimate.length == 0) {
 				return NaN;
 			}
-		}
+		}*/
 	}
 
 	var sumInHours = 0;
 	var content = $(spanWithEstimate).html();
-	if (content.length > 1) {
+	console.log("card content: " + content);
+	if (content.length > 0) {
 		console.log("card content: " + content);
 		content.split(" ").forEach(function(item, index) {
 			var timeUnit = item[item.length-1];
 			var timeValue = parseFloat(item);
-			console.log("found card value: " + timeValue + " with unit " + timeUnit);
-
-			switch(timeUnit) {
+			console.log("2found card value: " + timeValue + " with unit " + timeUnit);
+			sumInHours += timeValue;
+			/*switch(timeUnit) {
 				case "w": sumInHours += timeValue * 8 * 5;
 				break;
 				case "d": sumInHours += timeValue * 8;
@@ -32,7 +34,7 @@ var handleCard = function(card) {
 				case "h": sumInHours += timeValue;
 				break;
 				default: console.log("Oops. Don't know how to handle time unit '" + timeUnit + "'. Please report me!");
-			}
+			}*/
 		});
 		return sumInHours;
 	}
@@ -51,12 +53,12 @@ var handleColumn = function(column, columnIdx, sumPerColumn) {
 			sumForThisColumnn += parseFloat(cardValue);
 		}
 	});
-	console.log("SUM FOR COLUMN #" + columnIdx + " is: " + (parseFloat(sumForThisColumnn)/8) + " days");
+	console.log("SUM FOR COLUMN #" + columnIdx + " is: " + (parseFloat(sumForThisColumnn)) + " hours");
 	if(typeof sumPerColumn[columnIdx] == "undefined") {
 		sumPerColumn[columnIdx] = 0;
 	}
 	if(typeof sumForThisColumnn != "undefined" && !isNaN(sumForThisColumnn)) {
-		sumPerColumn[columnIdx] += sumForThisColumnn/8;
+		sumPerColumn[columnIdx] += sumForThisColumnn;
 	}
 };
 
@@ -84,7 +86,7 @@ var handleColumn = function(column, columnIdx, sumPerColumn) {
 		if(divQty.length == 0) {
 			if(typeof sumPerColumn[columnIdx] != "undefined") {
 				console.log("Setting header #" + columnIdx + " to: " + sumPerColumn[columnIdx]);
-				$(this).append("<span class='sumcount label label-default'>" + (Math.round(sumPerColumn[columnIdx]*10)/10) + "d</span>");
+				$(this).append("<span class='sumcount label label-default'>" + (Math.round(sumPerColumn[columnIdx]*10)/10) + "</span>");
 			}
 		}
 		++columnIdx;
